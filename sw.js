@@ -1,4 +1,4 @@
-const CACHE_NAME = 'workout-app-v1';
+const CACHE_NAME = 'workout-app-v2';
 const urlsToCache = [
   './',
   './index.html',
@@ -6,7 +6,6 @@ const urlsToCache = [
   './manifest.json'
 ];
 
-// インストール時にキャッシュ
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -14,7 +13,6 @@ self.addEventListener('install', event => {
   );
 });
 
-// キャッシュから返す
 self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
@@ -28,7 +26,6 @@ self.addEventListener('fetch', event => {
   );
 });
 
-// 古いキャッシュを削除
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
