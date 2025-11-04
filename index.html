@@ -18,7 +18,7 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #0a0a0a;
             min-height: 100vh;
             padding-bottom: 80px;
         }
@@ -26,23 +26,27 @@
         .container {
             max-width: 100%;
             margin: 0 auto;
-            background: white;
+            background: #0a0a0a;
         }
         
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+            border-bottom: 1px solid #2563eb;
             color: white;
             padding: 20px;
             text-align: center;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
         }
         
         .header h1 {
             font-size: 1.5em;
             margin-bottom: 5px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
         
         .header p {
@@ -65,8 +69,8 @@
         
         .main-nav {
             display: flex;
-            background: white;
-            border-bottom: 2px solid #e9ecef;
+            background: #1a1a1a;
+            border-bottom: 1px solid #2a2a2a;
             position: sticky;
             top: 90px;
             z-index: 99;
@@ -80,26 +84,30 @@
             padding: 15px 10px;
             text-align: center;
             cursor: pointer;
-            background: white;
+            background: #1a1a1a;
             border: none;
             font-size: 0.85em;
-            font-weight: 600;
-            color: #495057;
+            font-weight: 400;
+            color: #999;
             transition: all 0.3s;
             white-space: nowrap;
+            letter-spacing: 0.5px;
         }
         
         .nav-item:hover {
-            background: #f8f9fa;
+            background: #222;
+            color: #2563eb;
         }
         
         .nav-item.active {
-            color: #667eea;
-            border-bottom: 3px solid #667eea;
+            color: #2563eb;
+            border-bottom: 2px solid #2563eb;
+            background: #0a0a0a;
         }
         
         .content {
             padding: 20px;
+            background: #0a0a0a;
         }
         
         .view {
@@ -121,24 +129,29 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-            border-radius: 10px;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+            border-radius: 12px;
+            border: 1px solid #2a2a2a;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         }
         
         .day-title {
             font-size: 1.3em;
-            color: #667eea;
-            font-weight: bold;
+            color: #2563eb;
+            font-weight: 300;
+            letter-spacing: 1px;
         }
         
         .day-badge {
-            background: #667eea;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
             color: white;
             padding: 8px 15px;
             border-radius: 20px;
             font-size: 0.85em;
-            font-weight: 600;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
         }
         
         .exercise-list {
@@ -147,17 +160,25 @@
         }
         
         .exercise-card {
-            background: #f8f9fa;
+            background: #1a1a1a;
             border-radius: 12px;
             padding: 15px;
-            border-left: 4px solid #667eea;
+            border-left: 3px solid #2563eb;
             transition: all 0.3s;
+            border: 1px solid #2a2a2a;
+        }
+        
+        .exercise-card:hover {
+            background: #222;
+            border-left-color: #3b82f6;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
         }
         
         .exercise-card.completed {
-            background: #d4edda;
-            border-left-color: #28a745;
-            opacity: 0.8;
+            background: #0f2e1a;
+            border-left-color: #10b981;
+            border-color: #1a4d2e;
+            opacity: 0.9;
         }
         
         .exercise-header {
@@ -169,18 +190,19 @@
         
         .exercise-name {
             font-size: 1.1em;
-            font-weight: 600;
-            color: #212529;
+            font-weight: 400;
+            color: #ffffff;
             flex: 1;
+            letter-spacing: 0.3px;
         }
         
         .check-btn {
             width: 28px;
             height: 28px;
             min-width: 28px;
-            border: 2px solid #667eea;
+            border: 2px solid #2563eb;
             border-radius: 50%;
-            background: white;
+            background: #0a0a0a;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -188,9 +210,14 @@
             transition: all 0.3s;
         }
         
+        .check-btn:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
+        }
+        
         .check-btn.checked {
-            background: #28a745;
-            border-color: #28a745;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-color: #10b981;
         }
         
         .check-btn.checked::after {
@@ -200,7 +227,7 @@
         }
         
         .exercise-details {
-            color: #6c757d;
+            color: #999;
             font-size: 0.9em;
             line-height: 1.5;
             margin-bottom: 5px;
@@ -208,65 +235,72 @@
         
         .exercise-sets {
             margin-top: 5px;
-            font-weight: 600;
-            color: #495057;
+            font-weight: 400;
+            color: #bbb;
             font-size: 0.9em;
         }
         
         .tips {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 12px;
+            background: linear-gradient(135deg, #1a2332 0%, #0f1419 100%);
+            border-left: 3px solid #2563eb;
+            padding: 15px;
             border-radius: 8px;
             margin-top: 15px;
+            border: 1px solid #2a3a4a;
         }
         
         .tips-title {
-            font-weight: 600;
-            color: #856404;
-            margin-bottom: 5px;
+            font-weight: 400;
+            color: #2563eb;
+            margin-bottom: 8px;
             font-size: 0.95em;
+            letter-spacing: 0.5px;
         }
         
         .tips-content {
-            color: #856404;
+            color: #bbb;
             font-size: 0.85em;
-            line-height: 1.5;
+            line-height: 1.6;
         }
         
         .progress-card {
-            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
+            border: 1px solid #2a2a2a;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         }
         
         .progress-title {
             font-size: 1.1em;
-            font-weight: 600;
+            font-weight: 300;
             margin-bottom: 12px;
-            color: #667eea;
+            color: #2563eb;
+            letter-spacing: 1px;
         }
         
         .progress-bar-container {
-            background: white;
+            background: #0a0a0a;
             height: 30px;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
             margin-bottom: 10px;
+            border: 1px solid #2a2a2a;
         }
         
         .progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(90deg, #2563eb 0%, #1d4ed8 100%);
             transition: width 0.5s;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-weight: 600;
+            font-weight: 400;
             font-size: 0.85em;
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.5);
         }
         
         .stats-grid {
@@ -277,22 +311,24 @@
         }
         
         .stat-card {
-            background: white;
+            background: #1a1a1a;
             padding: 15px;
             border-radius: 10px;
             text-align: center;
+            border: 1px solid #2a2a2a;
         }
         
         .stat-value {
             font-size: 1.8em;
-            font-weight: bold;
-            color: #667eea;
+            font-weight: 300;
+            color: #2563eb;
         }
         
         .stat-label {
             font-size: 0.85em;
-            color: #6c757d;
+            color: #999;
             margin-top: 5px;
+            letter-spacing: 0.5px;
         }
         
         .history-list {
@@ -301,23 +337,25 @@
         }
         
         .history-item {
-            background: white;
+            background: #1a1a1a;
             border-radius: 10px;
             padding: 15px;
-            border-left: 4px solid #667eea;
+            border-left: 3px solid #2563eb;
+            border: 1px solid #2a2a2a;
         }
         
         .history-week {
-            font-weight: 600;
-            color: #495057;
+            font-weight: 400;
+            color: #ffffff;
             margin-bottom: 8px;
+            letter-spacing: 0.5px;
         }
         
         .history-stats {
             display: flex;
             gap: 15px;
             font-size: 0.9em;
-            color: #6c757d;
+            color: #999;
         }
         
         .photo-grid {
@@ -328,23 +366,25 @@
         }
         
         .photo-card {
-            background: white;
+            background: #1a1a1a;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            border: 1px solid #2a2a2a;
         }
         
         .photo-placeholder {
             aspect-ratio: 3/4;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #6c757d;
+            color: #2563eb;
             font-size: 3em;
             cursor: pointer;
             position: relative;
             overflow: hidden;
+            border-bottom: 1px solid #2a2a2a;
         }
         
         .photo-placeholder img {
@@ -359,14 +399,15 @@
         .photo-label {
             padding: 10px;
             text-align: center;
-            font-weight: 600;
-            color: #495057;
+            font-weight: 400;
+            color: #ffffff;
             font-size: 0.9em;
+            letter-spacing: 0.5px;
         }
         
         .photo-date {
             font-size: 0.75em;
-            color: #6c757d;
+            color: #999;
             margin-top: 2px;
         }
         
@@ -383,13 +424,15 @@
         }
         
         .btn-primary {
-            background: #667eea;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
             color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
         
         .btn-primary:hover {
-            background: #5568d3;
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
             transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
         }
         
         .btn-danger {
@@ -407,17 +450,19 @@
         }
         
         .settings-section {
-            background: white;
+            background: #1a1a1a;
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 15px;
+            border: 1px solid #2a2a2a;
         }
         
         .settings-title {
-            font-weight: 600;
-            color: #495057;
+            font-weight: 300;
+            color: #ffffff;
             margin-bottom: 15px;
             font-size: 1.1em;
+            letter-spacing: 1px;
         }
         
         .setting-item {
@@ -425,7 +470,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 12px 0;
-            border-bottom: 1px solid #e9ecef;
+            border-bottom: 1px solid #2a2a2a;
         }
         
         .setting-item:last-child {
@@ -433,7 +478,7 @@
         }
         
         .setting-label {
-            color: #495057;
+            color: #bbb;
             font-size: 0.95em;
         }
         
@@ -456,7 +501,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #ccc;
+            background-color: #2a2a2a;
             transition: .4s;
             border-radius: 26px;
         }
@@ -468,24 +513,33 @@
             width: 20px;
             left: 3px;
             bottom: 3px;
-            background-color: white;
+            background-color: #0a0a0a;
             transition: .4s;
             border-radius: 50%;
         }
         
         input:checked + .slider {
-            background-color: #667eea;
+            background-color: #2563eb;
         }
         
         input:checked + .slider:before {
             transform: translateX(24px);
+            background-color: white;
         }
         
         .time-picker {
             padding: 8px;
-            border: 2px solid #e9ecef;
+            border: 1px solid #2a2a2a;
             border-radius: 6px;
             font-size: 0.95em;
+            background: #0a0a0a;
+            color: #ffffff;
+        }
+        
+        .time-picker:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 8px rgba(37, 99, 235, 0.3);
         }
         
         input[type="file"] {
@@ -532,13 +586,14 @@
         }
         
         .modal-content {
-            background: white;
+            background: #1a1a1a;
             padding: 25px;
             border-radius: 15px;
             max-width: 90%;
             max-height: 80%;
             overflow-y: auto;
             animation: slideUp 0.3s;
+            border: 1px solid #2a2a2a;
         }
         
         @keyframes slideUp {
@@ -548,15 +603,16 @@
         
         .modal-header {
             font-size: 1.3em;
-            font-weight: 600;
+            font-weight: 300;
             margin-bottom: 15px;
-            color: #495057;
+            color: #ffffff;
+            letter-spacing: 1px;
         }
         
         .modal-body {
             margin-bottom: 15px;
             line-height: 1.6;
-            color: #6c757d;
+            color: #bbb;
         }
         
         .modal-footer {
@@ -606,7 +662,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>💪 筋力アップ管理</h1>
+            <h1>Workout Manager</h1>
             <p>週5-6日 | ジムメイン</p>
         </div>
         
@@ -637,7 +693,7 @@
             <!-- 進捗ビュー -->
             <div id="progressView" class="view">
                 <div class="progress-card">
-                    <div class="progress-title">📊 今週の達成率</div>
+                    <div class="progress-title">今週の達成率</div>
                     <div class="progress-bar-container">
                         <div class="progress-bar" id="weekProgressBar">0%</div>
                     </div>
@@ -667,7 +723,7 @@
             <!-- 履歴ビュー -->
             <div id="historyView" class="view">
                 <div class="progress-card">
-                    <div class="progress-title">📈 過去の記録</div>
+                    <div class="progress-title">過去の記録</div>
                     <div id="historyList" class="history-list"></div>
                 </div>
                 <button class="btn btn-danger" onclick="confirmClearHistory()">全履歴を削除</button>
@@ -676,7 +732,7 @@
             <!-- 写真ビュー -->
             <div id="photosView" class="view">
                 <div class="progress-card">
-                    <div class="progress-title">📸 進捗写真</div>
+                    <div class="progress-title">進捗写真</div>
                     <p style="color: #6c757d; font-size: 0.9em; margin-bottom: 15px;">
                         ビフォーアフターを記録して、変化を実感しましょう！
                     </p>
@@ -714,7 +770,7 @@
             <!-- 設定ビュー -->
             <div id="settingsView" class="view">
                 <div class="settings-section">
-                    <div class="settings-title">🔔 通知設定</div>
+                    <div class="settings-title">通知設定</div>
                     <div class="setting-item">
                         <div class="setting-label">トレーニング通知</div>
                         <label class="toggle-switch">
@@ -729,7 +785,7 @@
                 </div>
                 
                 <div class="settings-section">
-                    <div class="settings-title">📱 アプリ設定</div>
+                    <div class="settings-title">アプリ設定</div>
                     <div class="setting-item">
                         <div class="setting-label">週の開始日</div>
                         <select class="time-picker" id="weekStart" onchange="updateWeekStart()">
@@ -740,7 +796,7 @@
                 </div>
                 
                 <div class="settings-section">
-                    <div class="settings-title">ℹ️ アプリについて</div>
+                    <div class="settings-title">アプリについて</div>
                     <p style="color: #6c757d; font-size: 0.9em; line-height: 1.6;">
                         バージョン: 1.0.0<br>
                         このアプリはあなたの筋力トレーニングをサポートします。<br>
