@@ -187,6 +187,7 @@
             transition: all 0.3s ease;
             border: 1px solid rgba(59, 130, 246, 0.2);
             backdrop-filter: blur(8px);
+            cursor: pointer;
         }
         
         .exercise-card:hover {
@@ -205,6 +206,25 @@
         .exercise-card.completed:hover {
             background: rgba(16, 185, 129, 0.2);
             box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+        }
+        
+        .exercise-link-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 50%;
+            color: #60a5fa;
+            font-size: 0.75em;
+            margin-left: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .exercise-link-icon:hover {
+            background: rgba(59, 130, 246, 0.4);
+            transform: scale(1.1);
         }
         
         .exercise-header {
@@ -696,6 +716,74 @@
             width: 95%;
         }
         
+        .video-modal-content {
+            max-width: 900px;
+            width: 95%;
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            margin-bottom: 20px;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .video-container iframe,
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .link-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .link-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: rgba(26, 26, 46, 0.5);
+            border-radius: 8px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        
+        .link-item a {
+            flex: 1;
+            color: #60a5fa;
+            text-decoration: none;
+            font-size: 0.9em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .link-item a:hover {
+            text-decoration: underline;
+        }
+        
+        .link-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 8px;
+            color: #60a5fa;
+            font-size: 1.2em;
+        }
+        
         .form-group {
             margin-bottom: 20px;
         }
@@ -1015,6 +1103,17 @@
             <div class="modal-footer">
                 <button class="btn btn-primary" style="flex: 1;" onclick="closeEditDayModal()">キャンセル</button>
                 <button class="btn btn-success" style="flex: 1;" onclick="saveDayEdit()">保存</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 動画モーダル -->
+    <div id="videoModal" class="modal">
+        <div class="modal-content video-modal-content">
+            <div class="modal-header" id="videoModalTitle">参考動画</div>
+            <div class="modal-body" id="videoModalContent"></div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeVideoModal()">閉じる</button>
             </div>
         </div>
     </div>
