@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="筋トレ管理">
+    <link rel="manifest" href="manifest.json">
+    <title>筋力アップトレーニング管理アプリ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background: white;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 0.9em;
+        }
+        
+        .notification-banner {
+            background: #28a745;
+            color: white;
+            padding: 12px 20px;
+            text-align: center;
+            font-size: 0.9em;
+            display: none;
+        }
+        
+        .notification-banner.show {
+            display: block;
+        }
+        
+        .main-nav {
+            display: flex;
+            background: white;
+            border-bottom: 2px solid #e9ecef;
+            position: sticky;
+            top: 90px;
+            z-index: 99;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .nav-item {
+            flex: 1;
+            min-width: 80px;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: pointer;
+            background: white;
+            border: none;
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #495057;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .nav-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .nav-item.active {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .content {
+            padding: 20px;
+        }
+        
+        .view {
+            display: none;
+        }
+        
+        .view.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border-radius: 10px;
+        }
+        
+        .day-title {
+            font-size: 1.3em;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .day-badge {
+            background: #667eea;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        
+        .exercise-list {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .exercise-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s;
+        }
+        
+        .exercise-card.completed {
+            background: #d4edda;
+            border-left-color: #28a745;
+            opacity: 0.8;
+        }
+        
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .exercise-name {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #212529;
+            flex: 1;
+        }
+        
+        .check-btn {
+            width: 28px;
+            height: 28px;
+            min-width: 28px;
+            border: 2px solid #667eea;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .check-btn.checked {
+            background: #28a745;
+            border-color: #28a745;
+        }
+        
+        .check-btn.checked::after {
+            content: '✓';
+            color: white;
+            font-weight: bold;
+        }
+        
+        .exercise-details {
+            color: #6c757d;
+            font-size: 0.9em;
+            line-height: 1.5;
+            margin-bottom: 5px;
+        }
+        
+        .exercise-sets {
+            margin-top: 5px;
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.9em;
+        }
+        
+        .tips {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        .tips-title {
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 5px;
+            font-size: 0.95em;
+        }
+        
+        .tips-content {
+            color: #856404;
+            font-size: 0.85em;
+            line-height: 1.5;
+        }
+        
+        .progress-card {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .progress-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #667eea;
+        }
+        
+        .progress-bar-container {
+            background: white;
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 10px;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85em;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 0.85em;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        
+        .history-list {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .history-item {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .history-week {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+        
+        .history-stats {
+            display: flex;
+            gap: 15px;
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .photo-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .photo-placeholder {
+            aspect-ratio: 3/4;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-size: 3em;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .photo-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        .photo-label {
+            padding: 10px;
+            text-align: center;
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.9em;
+        }
+        
+        .photo-date {
+            font-size: 0.75em;
+            color: #6c757d;
+            margin-top: 2px;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95em;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .settings-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .settings-title {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+        
+        .setting-label {
+            color: #495057;
+            font-size: 0.95em;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 26px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #667eea;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+        
+        .time-picker {
+            padding: 8px;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 0.95em;
+        }
+        
+        input[type="file"] {
+            display: none;
+        }
+        
+        .fab {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+            z-index: 50;
+        }
+        
+        .fab:hover {
+            transform: scale(1.1);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s;
+        }
+        
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            max-width: 90%;
+            max-height: 80%;
+            overflow-y: auto;
+            animation: slideUp 0.3s;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-header {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #495057;
+        }
+        
+        .modal-body {
+            margin-bottom: 15px;
+            line-height: 1.6;
+            color: #6c757d;
+        }
+        
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .overview-grid {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .overview-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .overview-day {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+        
+        .overview-desc {
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.3em;
+            }
+            
+            .nav-item {
+                font-size: 0.8em;
+                padding: 12px 8px;
+            }
+            
+            .content {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💪 筋力アップ管理</h1>
+            <p>週5-6日 | ジムメイン</p>
+        </div>
+        
+        <div id="notificationBanner" class="notification-banner">
+            通知が有効になりました！
+        </div>
+        
+        <nav class="main-nav">
+            <button class="nav-item active" onclick="switchView('today')">今日</button>
+            <button class="nav-item" onclick="switchView('week')">週間</button>
+            <button class="nav-item" onclick="switchView('progress')">進捗</button>
+            <button class="nav-item" onclick="switchView('history')">履歴</button>
+            <button class="nav-item" onclick="switchView('photos')">写真</button>
+            <button class="nav-item" onclick="switchView('settings')">設定</button>
+        </nav>
+        
+        <div class="content">
+            <!-- 今日のビュー -->
+            <div id="todayView" class="view active">
+                <div id="todayContent"></div>
+            </div>
+            
+            <!-- 週間ビュー -->
+            <div id="weekView" class="view">
+                <div id="weekContent"></div>
+            </div>
+            
+            <!-- 進捗ビュー -->
+            <div id="progressView" class="view">
+                <div class="progress-card">
+                    <div class="progress-title">📊 今週の達成率</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="weekProgressBar">0%</div>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="completedDays">0</div>
+                            <div class="stat-label">完了日数</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="totalExercises">0</div>
+                            <div class="stat-label">総エクササイズ</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="currentStreak">0</div>
+                            <div class="stat-label">連続日数</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="weekStreak">0</div>
+                            <div class="stat-label">週間継続</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-danger" onclick="confirmReset()">今週の進捗をリセット</button>
+            </div>
+            
+            <!-- 履歴ビュー -->
+            <div id="historyView" class="view">
+                <div class="progress-card">
+                    <div class="progress-title">📈 過去の記録</div>
+                    <div id="historyList" class="history-list"></div>
+                </div>
+                <button class="btn btn-danger" onclick="confirmClearHistory()">全履歴を削除</button>
+            </div>
+            
+            <!-- 写真ビュー -->
+            <div id="photosView" class="view">
+                <div class="progress-card">
+                    <div class="progress-title">📸 進捗写真</div>
+                    <p style="color: #6c757d; font-size: 0.9em; margin-bottom: 15px;">
+                        ビフォーアフターを記録して、変化を実感しましょう！
+                    </p>
+                </div>
+                
+                <div class="photo-grid">
+                    <div class="photo-card">
+                        <div class="photo-placeholder" onclick="document.getElementById('beforePhoto').click()">
+                            <span id="beforePhotoPreview">📷</span>
+                            <img id="beforePhotoImg" style="display: none;">
+                        </div>
+                        <div class="photo-label">
+                            ビフォー
+                            <div class="photo-date" id="beforeDate">未設定</div>
+                        </div>
+                        <input type="file" id="beforePhoto" accept="image/*" onchange="handlePhotoUpload('before', this)">
+                    </div>
+                    
+                    <div class="photo-card">
+                        <div class="photo-placeholder" onclick="document.getElementById('afterPhoto').click()">
+                            <span id="afterPhotoPreview">📷</span>
+                            <img id="afterPhotoImg" style="display: none;">
+                        </div>
+                        <div class="photo-label">
+                            アフター
+                            <div class="photo-date" id="afterDate">未設定</div>
+                        </div>
+                        <input type="file" id="afterPhoto" accept="image/*" onchange="handlePhotoUpload('after', this)">
+                    </div>
+                </div>
+                
+                <button class="btn btn-danger" onclick="confirmClearPhotos()">写真を削除</button>
+            </div>
+            
+            <!-- 設定ビュー -->
+            <div id="settingsView" class="view">
+                <div class="settings-section">
+                    <div class="settings-title">🔔 通知設定</div>
+                    <div class="setting-item">
+                        <div class="setting-label">トレーニング通知</div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="notificationToggle" onchange="toggleNotifications()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item" id="timePickerSection" style="display: none;">
+                        <div class="setting-label">通知時刻</div>
+                        <input type="time" id="notificationTime" class="time-picker" value="18:00" onchange="updateNotificationTime()">
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <div class="settings-title">📱 アプリ設定</div>
+                    <div class="setting-item">
+                        <div class="setting-label">週の開始日</div>
+                        <select class="time-picker" id="weekStart" onchange="updateWeekStart()">
+                            <option value="0">日曜日</option>
+                            <option value="1" selected>月曜日</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <div class="settings-title">ℹ️ アプリについて</div>
+                    <p style="color: #6c757d; font-size: 0.9em; line-height: 1.6;">
+                        バージョン: 1.0.0<br>
+                        このアプリはあなたの筋力トレーニングをサポートします。<br>
+                        データはすべてブラウザに保存されます。
+                    </p>
+                </div>
+                
+                <button class="btn btn-primary" onclick="installApp()">ホーム画面に追加</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- モーダル -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header" id="modalTitle">確認</div>
+            <div class="modal-body" id="modalBody">本当に実行しますか？</div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" style="flex: 1;" onclick="closeModal()">キャンセル</button>
+                <button class="btn btn-danger" style="flex: 1;" onclick="executeModalAction()">実行</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
