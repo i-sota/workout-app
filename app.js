@@ -6,8 +6,8 @@ const defaultWorkoutData = {
             badge: 'ジム 60分',
             tip: '週の始まりは大きな筋肉から！胸をしっかり張って、肩甲骨を寄せる意識で。',
             exercises: [
-                { name: 'ウォームアップ', details: 'トレッドミル軽めジョギングまたはバイク、肩回し', sets: '5-7分' },
-                { name: 'ベンチプレス', details: '胸のメイン種目。バーを胸につける意識で', sets: '4セット × 10-12回' }
+                { name: 'ウォームアップ', details: 'トレッドミル軽めジョギングまたはバイク、肩回し', sets: '5-7分', link: null },
+                { name: 'ベンチプレス', details: '胸のメイン種目。バーを胸につける意識で', sets: '4セット × 10-12回', link: null }
             ]
         },
         2: {
@@ -15,8 +15,8 @@ const defaultWorkoutData = {
             badge: 'ジム 60分',
             tip: '脚トレは全身で一番エネルギーを使うので、しっかり栄養補給を！呼吸を止めずに。',
             exercises: [
-                { name: 'ウォームアップ', details: 'バイク or トレッドミル、股関節・足首回し', sets: '5-7分' },
-                { name: 'スクワット', details: '下半身の王道。膝がつま先より前に出ないように', sets: '4セット × 10-12回' }
+                { name: 'ウォームアップ', details: 'バイク or トレッドミル、股関節・足首回し', sets: '5-7分', link: null },
+                { name: 'スクワット', details: '下半身の王道。膝がつま先より前に出ないように', sets: '4セット × 10-12回', link: null }
             ]
         },
         3: {
@@ -24,7 +24,7 @@ const defaultWorkoutData = {
             badge: '自宅 30-60分',
             tip: '週半ばの回復日。激しい運動は避けて、体をリフレッシュさせましょう。',
             exercises: [
-                { name: '軽いヨガ・ストレッチ', details: '全身をゆっくり伸ばす', sets: '30-40分' }
+                { name: '軽いヨガ・ストレッチ', details: '全身をゆっくり伸ばす', sets: '30-40分', link: null }
             ]
         },
         4: {
@@ -32,8 +32,8 @@ const defaultWorkoutData = {
             badge: 'ジム 60分',
             tip: '引く動作は肩甲骨から！背中を意識して、腕だけで引かないように注意。',
             exercises: [
-                { name: 'ウォームアップ', details: 'ローイングマシン or バイク、肩甲骨回し', sets: '5-7分' },
-                { name: 'デッドリフト', details: '背中全体を鍛える最強種目。フォーム重視で', sets: '4セット × 8-10回' }
+                { name: 'ウォームアップ', details: 'ローイングマシン or バイク、肩甲骨回し', sets: '5-7分', link: null },
+                { name: 'デッドリフト', details: '背中全体を鍛える最強種目。フォーム重視で', sets: '4セット × 8-10回', link: null }
             ]
         },
         5: {
@@ -41,8 +41,8 @@ const defaultWorkoutData = {
             badge: 'ジム 60分',
             tip: '肩は怪我しやすい部位なので、ウォームアップをしっかりと。重量よりフォーム重視！',
             exercises: [
-                { name: 'ウォームアップ', details: '軽い有酸素、肩回し、腕回し', sets: '5-7分' },
-                { name: 'ショルダープレス', details: '肩のメイン種目', sets: '4セット × 10-12回' }
+                { name: 'ウォームアップ', details: '軽い有酸素、肩回し、腕回し', sets: '5-7分', link: null },
+                { name: 'ショルダープレス', details: '肩のメイン種目', sets: '4セット × 10-12回', link: null }
             ]
         },
         6: {
@@ -50,7 +50,7 @@ const defaultWorkoutData = {
             badge: '選択可 60分',
             tip: '週の疲労度に合わせて柔軟に選択！無理は禁物。',
             exercises: [
-                { name: '軽い全身トレーニング', details: '各部位1-2種目ずつ', sets: '60分' }
+                { name: '軽い全身トレーニング', details: '各部位1-2種目ずつ', sets: '60分', link: null }
             ]
         }
     }
@@ -209,10 +209,14 @@ function renderDayContent(dayNum, dayData, context) {
     
     dayData.exercises.forEach((exercise, index) => {
         const isCompleted = savedProgress.includes(index);
+        const hasLink = exercise.link && exercise.link.trim() !== '';
         html += `
-            <div class="exercise-card ${isCompleted ? 'completed' : ''}" onclick="toggleExercise(${dayNum}, ${index}, '${context}')">
-                <div class="exercise-header">
-                    <div class="exercise-name">${exercise.name}</div>
+            <div class="exercise-card ${isCompleted ? 'completed' : ''}">
+                <div class="exercise-header" onclick="toggleExercise(${dayNum}, ${index}, '${context}')">
+                    <div class="exercise-name">
+                        ${exercise.name}
+                        ${hasLink ? `<span class="exercise-link-icon" onclick="event.stopPropagation(); openVideoModal('${escapeHtml(exercise.name)}', '${escapeHtml(exercise.link)}')">▶</span>` : ''}
+                    </div>
                     <div class="check-btn ${isCompleted ? 'checked' : ''}"></div>
                 </div>
                 <div class="exercise-details">${exercise.details}</div>
@@ -270,6 +274,11 @@ function renderExercisesList(exercises) {
                     <label class="form-label">セット数・回数</label>
                     <input type="text" class="form-input exercise-sets-input" value="${exercise.sets}" placeholder="例: 4セット × 10-12回">
                 </div>
+                <div class="form-group">
+                    <label class="form-label">参考リンク（YouTube、Instagram等）</label>
+                    <input type="url" class="form-input exercise-link-input" value="${exercise.link || ''}" placeholder="https://www.youtube.com/watch?v=...">
+                    <small style="color: #999; font-size: 0.85em; margin-top: 5px; display: block;">YouTubeやInstagramの動画リンクを貼り付けると、トレーニング時に参照できます</small>
+                </div>
             </div>
         `;
     });
@@ -301,6 +310,11 @@ function addExercise() {
         <div class="form-group">
             <label class="form-label">セット数・回数</label>
             <input type="text" class="form-input exercise-sets-input" placeholder="例: 4セット × 10-12回">
+        </div>
+        <div class="form-group">
+            <label class="form-label">参考リンク（YouTube、Instagram等）</label>
+            <input type="url" class="form-input exercise-link-input" placeholder="https://www.youtube.com/watch?v=...">
+            <small style="color: #999; font-size: 0.85em; margin-top: 5px; display: block;">YouTubeやInstagramの動画リンクを貼り付けると、トレーニング時に参照できます</small>
         </div>
     `;
     
@@ -336,9 +350,10 @@ function saveDayEdit() {
         const name = item.querySelector('.exercise-name-input').value.trim();
         const details = item.querySelector('.exercise-details-input').value.trim();
         const sets = item.querySelector('.exercise-sets-input').value.trim();
+        const link = item.querySelector('.exercise-link-input').value.trim();
         
         if (name) {
-            exercises.push({ name, details, sets });
+            exercises.push({ name, details, sets, link: link || null });
         }
     }
     
@@ -834,6 +849,93 @@ function clearPhotos() {
 }
 
 // ユーティリティ関数
+function escapeHtml(text) {
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, m => map[m]);
+}
+
+// 動画モーダル
+function openVideoModal(exerciseName, link) {
+    const modal = document.getElementById('videoModal');
+    const title = document.getElementById('videoModalTitle');
+    const content = document.getElementById('videoModalContent');
+    
+    title.textContent = exerciseName;
+    
+    let embedHtml = '';
+    
+    // YouTube
+    if (link.includes('youtube.com') || link.includes('youtu.be')) {
+        const videoId = extractYouTubeId(link);
+        if (videoId) {
+            embedHtml = `
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/${videoId}" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>
+                </div>
+            `;
+        }
+    }
+    // Instagram
+    else if (link.includes('instagram.com')) {
+        embedHtml = `
+            <div style="background: rgba(26, 26, 46, 0.5); padding: 20px; border-radius: 12px; text-align: center;">
+                <p style="color: #999; margin-bottom: 15px;">Instagramの投稿を見る:</p>
+                <a href="${link}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="display: inline-block; width: auto;">
+                    Instagramで開く
+                </a>
+            </div>
+        `;
+    }
+    // その他のリンク
+    else {
+        embedHtml = `
+            <div style="background: rgba(26, 26, 46, 0.5); padding: 20px; border-radius: 12px; text-align: center;">
+                <p style="color: #999; margin-bottom: 15px;">参考リンク:</p>
+                <a href="${link}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="display: inline-block; width: auto;">
+                    リンクを開く
+                </a>
+            </div>
+        `;
+    }
+    
+    content.innerHTML = embedHtml;
+    modal.classList.add('show');
+}
+
+function extractYouTubeId(url) {
+    const patterns = [
+        /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/,
+        /youtube\.com\/embed\/([^&\n?#]+)/,
+        /youtube\.com\/v\/([^&\n?#]+)/
+    ];
+    
+    for (let pattern of patterns) {
+        const match = url.match(pattern);
+        if (match && match[1]) {
+            return match[1];
+        }
+    }
+    return null;
+}
+
+function closeVideoModal() {
+    const modal = document.getElementById('videoModal');
+    modal.classList.remove('show');
+    // 動画を停止するためにコンテンツをクリア
+    setTimeout(() => {
+        document.getElementById('videoModalContent').innerHTML = '';
+    }, 300);
+}
+
 function getDateKey() {
     const now = new Date();
     const day = now.getDay();
@@ -873,5 +975,11 @@ document.getElementById('confirmModal').addEventListener('click', function(e) {
 document.getElementById('editDayModal').addEventListener('click', function(e) {
     if (e.target === this) {
         closeEditDayModal();
+    }
+});
+
+document.getElementById('videoModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeVideoModal();
     }
 });
